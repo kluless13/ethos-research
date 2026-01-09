@@ -1,0 +1,42 @@
+# Environment
+.env
+*.env.local
+
+# API Documentation (private)
+TWITTERAPI.md
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+venv/
+.venv/
+*.egg-info/
+
+# Data (large files - not committed)
+data/raw/*.json
+data/processed/*.json
+data/raw/*.csv
+data/processed/*.csv
+
+# But DO include analysis results
+!data/analysis/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Logs
+logs/*.log
+*.log
+
+# OS
+Thumbs.db
