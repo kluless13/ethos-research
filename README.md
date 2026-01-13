@@ -4,26 +4,13 @@
 
 **Independent research validating whether Ethos Network vouches reflect genuine social relationships.**
 
-[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
-[![ethos-py](https://img.shields.io/pypi/v/ethos-py?label=ethos-py&color=green)](https://pypi.org/project/ethos-py/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![npm downloads](https://img.shields.io/npm/dm/ethos-ts-sdk.svg)](https://www.npmjs.com/package/ethos-ts-sdk)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
 
-ethos-ts-sdk stats:
-[![npm version](https://img.shields.io/npm/v/ethos-ts-sdk.svg)](https://www.npmjs.com/package/ethos-ts-sdk)
-[![npm downloads](https://img.shields.io/npm/dm/ethos-ts-sdk.svg)](https://www.npmjs.com/package/ethos-ts-sdk)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
-[![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Test Coverage](https://img.shields.io/badge/coverage-97.78%25-brightgreen.svg)](https://github.com/kluless13/ethos-ts-sdk)
+| SDK | Version | Downloads | Coverage |
+|-----|---------|-----------|----------|
+| **ethos-py** | [![PyPI](https://img.shields.io/pypi/v/ethos-py.svg)](https://pypi.org/project/ethos-py/) | [![Downloads](https://img.shields.io/pypi/dm/ethos-py.svg)](https://pypi.org/project/ethos-py/) | [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://pypi.org/project/ethos-py/) |
+| **ethos-ts-sdk** | [![npm](https://img.shields.io/npm/v/ethos-ts-sdk.svg)](https://www.npmjs.com/package/ethos-ts-sdk) | [![Downloads](https://img.shields.io/npm/dm/ethos-ts-sdk.svg)](https://www.npmjs.com/package/ethos-ts-sdk) | [![Coverage](https://img.shields.io/badge/coverage-97.78%25-brightgreen.svg)](https://github.com/kluless13/ethos-ts-sdk) |
 
-ethos-py stats:
-[![PyPI version](https://img.shields.io/pypi/v/ethos-py.svg)](https://pypi.org/project/ethos-py/)
-[![PyPI downloads](https://img.shields.io/pypi/dm/ethos-py.svg)](https://pypi.org/project/ethos-py/)
-[![Python 3.9+](https://img.shields.io/pypi/pyversions/ethos-py.svg)](https://pypi.org/project/ethos-py/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 ---
 
 <p align="center">
