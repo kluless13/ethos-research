@@ -1,16 +1,24 @@
-# 🔷 Ethos Network Research
+# Ethos Network Research
 
-## On-Chain Trust, Real-World Proof
+## On-Chain Reputation Meets Off-Chain Proof
 
 **Independent research validating whether Ethos Network vouches reflect genuine social relationships.**
 
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![ethos-py](https://img.shields.io/pypi/v/ethos-py?label=ethos-py&color=green)](https://pypi.org/project/ethos-py/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![npm downloads](https://img.shields.io/npm/dm/ethos-ts-sdk.svg)](https://www.npmjs.com/package/ethos-ts-sdk)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
 
 ---
 
-## 🔬 The Research Question
+<p align="center">
+  <img src="article%202.png" alt="Ethos Research Article" width="700">
+</p>
+
+---
+
+## The Research Question
 
 > **When someone stakes ETH to vouch for another person on Ethos, do they actually have a real social relationship?**
 
@@ -20,7 +28,7 @@ Ethos Network lets users stake cryptocurrency to vouch for others' reputations. 
 
 ---
 
-## 📊 Key Findings
+## Key Findings
 
 <table>
 <tr>
@@ -40,7 +48,7 @@ Ethos Network lets users stake cryptocurrency to vouch for others' reputations. 
 </td>
 <td width="50%">
 
-### @CrypSaf  
+### @CrypSaf
 **Second most vouched user**
 
 | Metric | Value |
@@ -56,7 +64,6 @@ Ethos Network lets users stake cryptocurrency to vouch for others' reputations. 
 </table>
 
 ### The Verdict
-
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
 │                                                                         │
@@ -70,10 +77,9 @@ Ethos Network lets users stake cryptocurrency to vouch for others' reputations. 
 
 ---
 
-## 📈 Vouch Authenticity Distribution
+## Vouch Authenticity Distribution
 
 For @serpinxbt (242 vouchers):
-
 ```
 Relationship Quality          Count    Percentage
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -91,7 +97,7 @@ Suspicious    ░░░░░░░░░░░░░░░░░░░░░░
 
 ---
 
-## 🎯 What This Proves
+## What This Proves
 
 ### 1. Ethos Vouches Are Meaningful
 When someone stakes ETH to vouch for you, they almost certainly have engaged with you on Twitter. This isn't speculation—it's social proof with financial commitment.
@@ -107,14 +113,12 @@ Users with high Ethos scores (like @serpinxbt with 2,478) aren't gaming the syst
 
 ---
 
-## 🛠️ ethos-py SDK
+## ethos-py SDK
 
 We built an **official Python SDK** for the Ethos API to power this research:
-
 ```bash
 pip install ethos-py
 ```
-
 ```python
 from ethos import Ethos
 
@@ -134,27 +138,149 @@ for market in client.markets.most_trusted(limit=10):
 ```
 
 **Features:**
-- 🔄 Automatic pagination
-- 📝 Fully typed (Pydantic models)
-- ⚡ Async support
-- 🔍 Built-in research helpers
+- Automatic pagination
+- Fully typed (Pydantic models)
+- Async support
+- Built-in research helpers
 
-📦 **PyPI:** [pypi.org/project/ethos-py](https://pypi.org/project/ethos-py/)  
-📂 **GitHub:** [github.com/kluless13/ethos-python-sdk](https://github.com/kluless13/ethos-python-sdk)
+**PyPI:** [pypi.org/project/ethos-py](https://pypi.org/project/ethos-py/)
+**GitHub:** [github.com/kluless13/ethos-python-sdk](https://github.com/kluless13/ethos-python-sdk)
 
 ---
 
-## 📁 Dataset
+## SDK vs Raw API: Why We Built ethos-py
+
+This research started with raw API calls. It was painful. So we built an SDK.
+
+### Getting Vouches for a User
+
+**Raw API approach (what we started with):**
+```python
+def iter_vouches_for_subject(self, profile_id: int, batch_size: int = 100) -> Iterator[dict]:
+    offset = 0
+    total = None
+
+    while True:
+        result = self.get_vouches(
+            subject_profile_ids=[profile_id],
+            limit=batch_size,
+            offset=offset
+        )
+
+        if total is None:
+            total = result["total"]
+
+        for vouch in result["values"]:
+            yield vouch
+
+        offset += batch_size
+        if offset >= total:
+            break
+
+        time.sleep(0.1)
+```
+
+**With ethos-py SDK:**
+```python
+client = Ethos()
+vouches = client.vouches.for_profile(profile_id)  # That's it.
+```
+
+**20 lines → 1 line.** Pagination handled automatically.
+
+### Getting User by Twitter Handle
+
+**Raw API approach:**
+```python
+user = client.get_user_by_twitter("serpinxbt")
+handle = user.get("username")  # Hope the key exists
+score = user.get("score", 0)   # Manual defaults
+```
+
+**With ethos-py SDK:**
+```python
+user = client.users.get_by_twitter("serpinxbt")
+handle = user.username        # Type-checked, IDE autocomplete
+score = user.score           # Type-checked
+```
+
+### Available SDK Resources
+
+| Resource | Key Methods |
+|----------|-------------|
+| `client.profiles` | `.get()`, `.get_by_twitter()`, `.list()`, `.search()`, `.recent()` |
+| `client.vouches` | `.list()`, `.for_profile()`, `.by_profile()`, `.between()` |
+| `client.reviews` | `.list()`, `.for_profile()`, `.positive_for()`, `.negative_for()` |
+| `client.scores` | `.get()`, `.breakdown()` |
+| `client.users` | `.get_by_twitter()`, `.bulk_by_twitter()`, `.search()` |
+| `client.markets` | `.list()`, `.most_trusted()`, `.most_distrusted()`, `.top_by_volume()` |
+| `client.activities` | `.list()`, `.recent()`, `.vouches()`, `.reviews()` |
+| `client.votes` | `.list()`, `.upvotes_for()`, `.downvotes_for()` |
+| `client.invitations` | `.list()`, `.by_sender()`, `.check_eligibility()` |
+
+Full SDK vs API comparison: [`analysis/sdk_comparison.md`](analysis/sdk_comparison.md)
+
+---
+
+## Repository Structure
+```
+ethos-research/
+├── README.md                 # You are here
+├── requirements.txt          # Python dependencies
+├── .env.example              # Configuration template (copy to .env)
+├── ethosapi.md               # Ethos API documentation notes
+│
+├── src/                      # Source code
+│   ├── ethos_client.py       # Ethos API client (raw, pre-SDK approach)
+│   └── twitter_client.py     # Twitter API client (TwitterAPI.io)
+│
+├── scripts/                  # Data collection pipeline (run in order)
+│   ├── 01_fetch_markets.py   # Step 1: Fetch all 219 reputation markets
+│   ├── 02_fetch_vouches.py   # Step 2: Fetch all 53,400+ vouches
+│   ├── 03_fetch_twitter.py   # Step 3: Get Twitter handles for vouchers
+│   └── 04_deep_dive_market.py # Step 4: Deep analysis of a specific market
+│
+├── data/                     # Generated data (see "Data Files" below)
+│   └── analysis/             # Final analysis outputs (committed)
+│       ├── serpinxbt_deep_dive.json   # 242 vouchers analyzed
+│       └── crypsaf_deep_dive.json     # 138 vouchers analyzed
+│
+└── analysis/                 # Research documentation
+    ├── serpinxbt_case_study.md   # Full case study: @serpinxbt (72% verified)
+    ├── crypsaf_case_study.md     # Full case study: @CrypSaf (88% verified)
+    └── sdk_comparison.md         # Why we built ethos-py (SDK vs raw API)
+```
+
+---
+
+## Data Files Explained
+
+### What's Committed (in `data/analysis/`)
+
+| File | Records | Size | Description |
+|------|---------|------|-------------|
+| `serpinxbt_deep_dive.json` | 242 | ~7MB | Per-voucher analysis for @serpinxbt |
+| `crypsaf_deep_dive.json` | 138 | ~6MB | Per-voucher analysis for @CrypSaf |
+
+Each record contains:
+- **Voucher's Twitter profile**: followers, following, account age, verification status
+- **Interaction counts**: voucher → subject mentions, subject → voucher mentions
+- **Follow relationship**: mutual, one-way, or none
+- **Relationship score**: 0.0 - 1.0 (calculated from above signals)
+- **Credibility score**: 0.0 - 1.0 (is the voucher account legit?)
+- **Tier classification**: inner_circle, active, passive, weak, none, or suspicious
+
+### What's Generated by Scripts (gitignored)
+
+These files are too large to commit. Run the pipeline to generate them:
 
 | File | Records | Description |
 |------|---------|-------------|
-| `markets.json` | 219 | Reputation markets (people being traded) |
-| `vouches.json` | 53,400 | On-chain vouch transactions |
-| `twitter_pairs` | 52,463 | Vouch pairs with Twitter handles |
-| `*_deep_dive.json` | 380 | Detailed per-voucher analysis |
+| `data/raw/markets.json` | 219 | All Ethos reputation markets |
+| `data/raw/vouches.json` | 53,400+ | All on-chain vouch transactions |
+| `data/processed/twitter_pairs.json` | 52,463 | Vouch pairs with Twitter handles |
 
 ### Data Collection Pipeline
-
 ```
 Ethos API                          TwitterAPI.io
     │                                    │
@@ -163,29 +289,31 @@ Ethos API                          TwitterAPI.io
 │ Markets │───▶│ Vouches │───▶│ Twitter Pairs   │───▶│ Analysis │
 │   219   │    │ 53,400  │    │ Follow + Engage │    │  Scores  │
 └─────────┘    └─────────┘    └─────────────────┘    └──────────┘
+     │              │                  │                   │
+     ▼              ▼                  ▼                   ▼
+  Script 01     Script 02          Script 03           Script 04
 ```
 
 ---
 
-## 🧮 Methodology
+## Methodology
 
 ### Relationship Score (0.0 - 1.0)
 
 For each vouch pair (A vouched for B):
-
 ```python
 score = 0.0
 
 # Interaction frequency (strongest signal)
 if interactions >= 10:  score += 0.50
-elif interactions >= 3: score += 0.35  
+elif interactions >= 3: score += 0.35
 elif interactions >= 1: score += 0.20
 
 # Bidirectional bonus
 if A_mentions_B and B_mentions_A:
     score += 0.20
 
-# Follow relationships  
+# Follow relationships
 if A_follows_B: score += 0.15
 if B_follows_A: score += 0.15
 ```
@@ -199,40 +327,110 @@ if B_follows_A: score += 0.15
 | **Passive** | Score ≥ 0.2 | Follows or occasional mentions |
 | **Weak** | Score > 0 | Minimal connection |
 | **None** | Score = 0 | No Twitter relationship found |
-| **Suspicious** | Low score + red flags | New account, low followers |
+| **Suspicious** | Low score + red flags | New account, low followers, bot patterns |
+
+### Credibility Score (0.0 - 1.0)
+
+We also score each voucher's account credibility:
+```python
+score = 0.0
+
+# Follower count
+if followers >= 10000: score += 0.30
+elif followers >= 1000: score += 0.20
+elif followers >= 100:  score += 0.10
+
+# Account age
+if age_days >= 730: score += 0.20  # 2+ years
+elif age_days >= 365: score += 0.15
+elif age_days >= 180: score += 0.10
+
+# Follower ratio (anti-bot signal)
+if followers/following > 2: score += 0.10
+
+# Verification
+if blue_verified: score += 0.10
+
+# Ethos score
+if ethos_score >= 1500: score += 0.20
+elif ethos_score >= 1000: score += 0.10
+```
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
+### Prerequisites
+
+- Python 3.11+
+- Twitter API access via [TwitterAPI.io](https://twitterapi.io) (or Twitter API v2)
+- (Optional) Ethos API key for higher rate limits
+
+### Setup
 ```bash
 # Clone the repo
 git clone https://github.com/kluless13/ethos-research.git
 cd ethos-research
 
-# Setup
+# Create virtual environment
 python -m venv venv
-source venv/bin/activate
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install dependencies
 pip install -r requirements.txt
 
-# Run deep dive on any market
-python scripts/04_deep_dive_market.py serpinxbt --yes
+# Configure environment
+cp .env.example .env
+# Edit .env with your API keys (see .env.example for all options)
 ```
 
-### Run Your Own Analysis
-
+### Run the Full Pipeline
 ```bash
-# Analyze any Ethos user
-python scripts/04_deep_dive_market.py <twitter_handle> --yes
+# Step 1: Fetch all reputation markets from Ethos
+python scripts/01_fetch_markets.py
+# Output: data/raw/markets.json (219 markets)
 
-# Output: data/analysis/<handle>_deep_dive.json
+# Step 2: Fetch all vouches
+python scripts/02_fetch_vouches.py
+# Output: data/raw/vouches.json (53,400+ vouches)
+
+# Step 3: Get Twitter handles for vouch pairs
+python scripts/03_fetch_twitter.py
+# Output: data/processed/twitter_pairs.json
+
+# Step 4: Deep dive on a specific market
+python scripts/04_deep_dive_market.py serpinxbt --yes
+# Output: data/analysis/serpinxbt_deep_dive.json
 ```
+
+### Analyze Any Ethos User
+```bash
+python scripts/04_deep_dive_market.py <twitter_handle> --yes
+```
+
+This will:
+1. Find the user's Ethos profile
+2. Fetch all their vouchers
+3. Cross-reference each voucher with Twitter data
+4. Score and classify each relationship
+5. Output detailed JSON analysis to `data/analysis/<handle>_deep_dive.json`
 
 ---
 
-## 🔮 Upcoming Research
+## Case Studies
 
-This is **Phase 1** of our Ethos Network research. Coming soon:
+Detailed analysis reports for the two most-vouched users:
+
+| User | Vouchers | Verified Real | Suspicious | Report |
+|------|----------|---------------|------------|--------|
+| @serpinxbt | 242 | 72% | 1.7% | [`analysis/serpinxbt_case_study.md`](analysis/serpinxbt_case_study.md) |
+| @CrypSaf | 138 | 88% | 0.7% | [`analysis/crypsaf_case_study.md`](analysis/crypsaf_case_study.md) |
+
+---
+
+## Upcoming Research
+
+Some ideas I had:
 
 - [ ] **Full market analysis** — All 200+ markets with vouchers
 - [ ] **Temporal analysis** — Do interactions precede vouches, or follow them?
@@ -244,25 +442,17 @@ This is **Phase 1** of our Ethos Network research. Coming soon:
 
 ---
 
-## 📄 Case Studies
-
-Detailed analysis reports:
-
-- [`analysis/serpinxbt_case_study.md`](analysis/serpinxbt_case_study.md) — 242 vouchers, 72% authentic
-- [`analysis/crypsaf_case_study.md`](analysis/crypsaf_case_study.md) — 138 vouchers, 88% authentic
-
----
-
-## 📚 References
+## References
 
 - [Ethos Network](https://ethos.network) — On-chain reputation protocol
 - [Ethos API Documentation](https://docs.ethos.network) — API reference
-- [ethos-py SDK](https://github.com/kluless13/ethos-python-sdk) — Python SDK for Ethos API
+- [ethos-py SDK](https://github.com/kluless13/ethos-py) — Python SDK for Ethos API
+- [ethos-ts-dsk](https://github.com/kluless13/ethos-ts-sdk) - Typescript SDK for Ethos API
 - [TwitterAPI.io](https://twitterapi.io) — Twitter data provider
 
 ---
 
-## 📜 License
+## License
 
 MIT License. See [LICENSE](LICENSE) for details.
 
